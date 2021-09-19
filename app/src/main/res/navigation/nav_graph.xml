@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_mainFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_movieSearchFragment"
+            app:destination="@id/movieSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/movieDetailFragment"
@@ -18,6 +21,14 @@
         android:label="MovieDetailFragment" >
         <action
             android:id="@+id/action_movieDetailFragment_self"
+            app:destination="@id/movieDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieSearchFragment"
+        android:name="com.ramo.movie.ui.searchFragment.MovieSearchFragment"
+        android:label="MovieSearchFragment" >
+        <action
+            android:id="@+id/action_movieSearchFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
     </fragment>
 </navigation>

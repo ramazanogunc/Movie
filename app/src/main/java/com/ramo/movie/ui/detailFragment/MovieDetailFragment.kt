@@ -1,5 +1,7 @@
 package com.ramo.movie.ui.detailFragment
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -70,6 +72,7 @@ class MovieDetailFragment : Fragment() {
                     binding.otherMoviesError.show()
                     binding.rwOtherMovies.hide()
                     binding.otherMoviesProgress.hide()
+                    binding.otherMoviesError.text = response.message
                 }
                 is NetworkResult.Loading -> {
                     binding.otherMoviesProgress.show()
@@ -101,6 +104,7 @@ class MovieDetailFragment : Fragment() {
                     binding.twDetailError.show()
                     binding.movieDetails.hide()
                     binding.detailProgress.hide()
+                    binding.twDetailError.text = response.message
                 }
                 is NetworkResult.Loading -> {
                     binding.detailProgress.show()
@@ -118,6 +122,12 @@ class MovieDetailFragment : Fragment() {
         val imdbIconUrl =
             "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/300px-IMDB_Logo_2016.svg.png"
         Glide.with(this).load(imdbIconUrl).into(binding.imageImdb)
+
+        // IMDB redirection
+        val baseImdbUrl = "https://www.imdb.com/title/"
+        binding.imageImdb.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(baseImdbUrl + movie.imdbId)))
+        }
 
         binding.title.text = movie.title
         binding.description.text = movie.overview

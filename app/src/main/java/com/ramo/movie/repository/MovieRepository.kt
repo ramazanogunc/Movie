@@ -40,4 +40,14 @@ class MovieRepository(
         }.flowOn(Dispatchers.IO)
     }
 
+    suspend fun getSearchResult(searchText: String): Flow<NetworkResult<MovieResponse>> {
+        return flow {
+            emit(NetworkResult.Loading())
+            emit(safeApiCall { remoteDataSource.getSearchResult(searchText) })
+        }.flowOn(Dispatchers.IO)
+    }
+
+
+
+
 }

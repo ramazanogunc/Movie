@@ -12,4 +12,8 @@ class RemoteDataSource(private val movieService: MovieService) {
 
     suspend fun getOtherMovie(movieId: Long) = movieService.getOtherMovie(movieId)
 
+    suspend fun getSearchResult(searchText: String) = movieService.getSearchResult(searchText)
+
+
+
 }
