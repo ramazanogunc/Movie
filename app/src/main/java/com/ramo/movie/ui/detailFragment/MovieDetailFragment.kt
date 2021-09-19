@@ -70,6 +70,7 @@ class MovieDetailFragment : Fragment() {
                     binding.otherMoviesError.show()
                     binding.rwOtherMovies.hide()
                     binding.otherMoviesProgress.hide()
+                    binding.otherMoviesError.text = response.message
                 }
                 is NetworkResult.Loading -> {
                     binding.otherMoviesProgress.show()
@@ -101,6 +102,7 @@ class MovieDetailFragment : Fragment() {
                     binding.twDetailError.show()
                     binding.movieDetails.hide()
                     binding.detailProgress.hide()
+                    binding.twDetailError.text = response.message
                 }
                 is NetworkResult.Loading -> {
                     binding.detailProgress.show()

@@ -59,6 +59,9 @@ class MainFragment : Fragment() {
     }
 
     private fun initUi() {
+        binding.searchButton.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_movieSearchFragment)
+        }
         binding.swipeToRefreshLayout.setOnRefreshListener {
             fetchSliderData()
             fetchRecyclerData()
