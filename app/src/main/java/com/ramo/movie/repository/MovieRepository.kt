@@ -1,6 +1,7 @@
 package com.ramo.movie.repository
 
 import com.ramo.RemoteDataSource
+import com.ramo.movie.model.remote.Movie
 import com.ramo.movie.model.remote.MovieResponse
 import com.ramo.movie.model.remote.NetworkResult
 import kotlinx.coroutines.Dispatchers
@@ -24,4 +25,19 @@ class MovieRepository(
             emit(safeApiCall { remoteDataSource.getUpcoming() })
         }.flowOn(Dispatchers.IO)
     }
+
+    suspend fun getMovie(movieId: Long): Flow<NetworkResult<Movie>> {
+        return flow {
+            emit(NetworkResult.Loading())
+            emit(safeApiCall { remoteDataSource.getMovie(movieId) })
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getOtherMovie(movieId: Long): Flow<NetworkResult<MovieResponse>> {
+        return flow {
+            emit(NetworkResult.Loading())
+            emit(safeApiCall { remoteDataSource.getOtherMovie(movieId) })
+        }.flowOn(Dispatchers.IO)
+    }
+
 }

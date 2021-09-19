@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.ramo.RemoteDataSource
 import com.ramo.movie.Constant
@@ -67,7 +68,7 @@ class MainFragment : Fragment() {
         sliderAdapter.addHolder(R.layout.item_slider) { view, item ->
             val sliderBinding = ItemSliderBinding.bind(view)
             sliderBinding.title.text = item.title
-            sliderBinding.description.text = textShorting(item.overview,100)
+            sliderBinding.description.text = textShorting(item.overview, 100)
             val imageUrl = Constant.imageBaseUrl + item.backdropPath
             Glide.with(this).load(imageUrl).into(sliderBinding.backgroundImage)
         }
@@ -75,14 +76,21 @@ class MainFragment : Fragment() {
         recyclerAdapter.addHolder(R.layout.item_movie) { view, item ->
             val recyclerBinding = ItemMovieBinding.bind(view)
             recyclerBinding.title.text = item.title
-            recyclerBinding.description.text = textShorting(item.overview,80)
+            recyclerBinding.description.text = textShorting(item.overview, 80)
             recyclerBinding.date.text = item.releaseDate
             val imageUrl = Constant.imageBaseUrl + item.posterPath
             Glide.with(this).load(imageUrl).into(recyclerBinding.movieImage)
         }
+        sliderAdapter.setOnItemClickListener(::itemClicks)
+        recyclerAdapter.setOnItemClickListener(::itemClicks)
 
         binding.viewPagerSlider.adapter = sliderAdapter
         binding.recyclerViewMovieList.adapter = recyclerAdapter
+    }
+
+    private fun itemClicks(view: View, movie: Movie) {
+        val bundle = bundleOf("movieId" to movie.id)
+        findNavController().navigate(R.id.action_mainFragment_to_movieDetailFragment, bundle)
     }
 
     private fun fetchSliderData() {
@@ -112,7 +120,7 @@ class MainFragment : Fragment() {
 
     private fun prepareSlider(movieResponse: MovieResponse) {
         val list = movieResponse.results
-        list.map { it.isSlider = true }
+        list.map { it.viewHolderId = R.layout.item_slider }
         sliderAdapter.submitList(list)
     }
 
@@ -124,7 +132,6 @@ class MainFragment : Fragment() {
                     binding.recyclerViewMovieList.show()
                     binding.twRecyclerError.hide()
                     binding.recyclerProgress.hide()
-                    Toast.makeText(requireContext(), response.data!!.results.size.toString(), Toast.LENGTH_SHORT).show()
                     prepareRecycler(response.data!!)
                 }
                 is NetworkResult.Error -> {
@@ -144,7 +151,7 @@ class MainFragment : Fragment() {
 
     private fun prepareRecycler(movieResponse: MovieResponse) {
         val list = movieResponse.results
-        list.map { it.isSlider = false }
+        list.map { it.viewHolderId = R.layout.item_movie }
         recyclerAdapter.submitList(list)
     }
 }
